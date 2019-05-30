@@ -1,21 +1,15 @@
 # tilt-gpfa.py
 # perform gpfa on tilt dataset
 
-import funs.util as util
-import funs.datamanager as dm
-import funs.engine as engine
+pgpfa = __import__("poisson-gpfa")
+util = pgpfa.funs.util
+dm = pgpfa.funs.datamanager
+engine = pgpfa.funs.engine
 import matplotlib.pyplot as plt
 import numpy as np
 import json
 import dill
 import sys
-
-# use to save previous jupyter envs
-# -> fitOnline_5.db => used fitOnline with batchSize=5
-# dill.dump_session('fitBatch5_correctTrialsAndEst.db')
-
-# load previous jupyter envs
-# dill.load_session('fitBatch5_correctTrialsAndEst.db')
 
 def load_data(binSize,binFilename,classifierFilename):
     # load binned resp data
@@ -128,6 +122,7 @@ def process_tilt_data(binSize,correct_trials,data,latent_dims):
                     }
 
         fitObj[event_name]=iter_gpfa(data_in,latent_dims,params,fig_params)
+    return fitObj
 
 def plot_3d_traj(filepath,trial_type,preamble):
     # plot multiple latent trajectories
@@ -199,8 +194,8 @@ if __name__ == '__main__':
     # load data
     print("Loading data...")
     binSize=5
-    binFilename='C:/Users/Mason/Box Sync/UC Davis/00 Quarters/Spring 2019/MAE298/03 Project/data/gpfa_inputs.json'
-    classifierFilename='C:/Users/Mason/Box Sync/UC Davis/00 Quarters/Spring 2019/MAE298/03 Project/data/tilt_psthclassifier.json'
+    binFilename='data/gpfa_inputs.json'
+    classifierFilename='data/tilt_psthclassifier.json'
     [correct_trials, data]=load_data(binSize,binFilename,classifierFilename)
     # perform gpfa for different latent trajectory dimensionalities
     print("Begin gpfa iteration...")
